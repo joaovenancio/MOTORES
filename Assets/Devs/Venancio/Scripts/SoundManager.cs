@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SoundManager : MonoBehaviour
@@ -10,9 +11,16 @@ public class SoundManager : MonoBehaviour
     [SerializeField]
     private AudioClipDictionaryPage[] m_backgroundMusicsData;
     public float BackgroundVolume = 1f;
-    
+    private Dictionary<string, AudioClip> backgroundMusics = new Dictionary<string, AudioClip>();
 
 
+    private void Awake()
+    {
+        foreach(AudioClipDictionaryPage backgroundMusic in m_backgroundMusicsData)
+        {
+            backgroundMusics.Add(backgroundMusic.Name, backgroundMusic.AudioClip);
+        }
+    }
 
     [Serializable]
     public struct AudioClipDictionaryPage
