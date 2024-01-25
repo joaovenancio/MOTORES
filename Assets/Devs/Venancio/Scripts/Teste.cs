@@ -8,7 +8,7 @@ public class Teste : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        audioManager.GlobalSoundEffectsVolume = 0f;
+        //audioManager.GlobalSoundEffectsVolume = 0f;
     }
 
     // Update is called once per frame

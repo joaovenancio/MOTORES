@@ -10,8 +10,8 @@ public class Testee : MonoBehaviour
     void Start()
     {
         audioManager.Play("Gaga", gameObject, "Teste");
-        audioManager.ChangeVolume(1f, "Teste");
-        //audioManager.DebugThis("Teste");
+        //audioManager.ChangeVolume(0.1f, "Teste");
+        audioManager.DebugThis("Teste");
 
         //audioManager.GlobalSoundEffectsVolume = 0f;
 

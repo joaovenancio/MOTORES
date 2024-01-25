@@ -484,9 +484,12 @@ MonoBehaviour:
   m_audioClipsData:
   - Name: Gaga
     AudioClip: {fileID: 8300000, guid: 931746d35a6b51b4bbd66a3d6a498b1d, type: 3}
-  _GlobalSoundEffectsVolume: 0
+  _GlobalSoundEffectsVolume: 1
   _activeAudioSourceList: []
-  _audioGroupList: []
+  _audioGroupList:
+  - Name: Teste
+    List: []
+    Volume: 0.5
   BackgroundMusicAudioSource: {fileID: 0}
 --- !u!4 &755876510
 Transform:

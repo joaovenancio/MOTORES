@@ -37,6 +37,9 @@ public class AudioManager : MonoBehaviour
     [SerializeField]
     private AudioClipDictionaryPage[] m_audioClipsData;
     private Dictionary<string, AudioClip> _audioClips = new Dictionary<string, AudioClip>();
+    
+    [Space]
+
     [Range(0, 1)] [SerializeField]
     private float _GlobalSoundEffectsVolume;
     public float GlobalSoundEffectsVolume {
@@ -50,6 +53,9 @@ public class AudioManager : MonoBehaviour
             UpdateSoundEffectsVolume();
         }
     }
+
+    [Space]
+
     [SerializeField]
     private List<AudioSource> _activeAudioSourceList = new List<AudioSource>();
     private Dictionary<AudioSource, float> _orignalVolumeDictionary = new Dictionary<AudioSource, float>();
@@ -60,8 +66,8 @@ public class AudioManager : MonoBehaviour
     [Space]
 
     [SerializeField]
-    private List<string> _audioGroupList = new List<string>();
-    private Dictionary<string, List<AudioSource>> _audioGroupDictionary = new Dictionary<string, List<AudioSource>>();
+    private List<AudioGroup> _audioGroupList = new List<AudioGroup>();
+    private Dictionary<string, AudioGroup> _audioGroupDictionary = new Dictionary<string, AudioGroup>();
 
 
     [Space][Space][Space]
@@ -70,13 +76,6 @@ public class AudioManager : MonoBehaviour
     [Space]
 
     public AudioSource BackgroundMusicAudioSource;
-
-    //[Serializable]
-    //public struct AudioGroupVolumeDictionary
-    //{
-    //    public string AudioGroupName;
-    //    public float Volume;
-    //}
 
     [Serializable]
     public struct AudioClipDictionaryPage
@@ -135,13 +134,24 @@ public class AudioManager : MonoBehaviour
 
         if (_audioGroupList != null)
         {
-            foreach (string audioGroup in _audioGroupList)
+            foreach (AudioGroup audioGroup in _audioGroupList)
             {
-                _audioGroupDictionary.Add(audioGroup, new List<AudioSource>());
+                if (audioGroup.Name == null)
+                    audioGroup.Name = "";
+
+                if (audioGroup.List == null)
+                    audioGroup.List = new List<AudioSource>();
+
+                if (audioGroup.Volume < 0f)
+                    audioGroup.Volume = 0f;
+                else if (audioGroup.Volume > 1f) 
+                    audioGroup.Volume = 1f;
+
+                _audioGroupDictionary.Add(audioGroup.Name, audioGroup);
             }
         } else
         {
-            _audioGroupList = new List<string>();
+            _audioGroupList = new List<AudioGroup>();
         }
     }
 
@@ -216,24 +226,24 @@ public class AudioManager : MonoBehaviour
         targetAudioSource.Play();
     }
 
-    private List<AudioSource> RetrieveAudioSourceListByAudioGroup(string audioGroupName, string methodThatCalled)
+    private AudioGroup RetrieveAudioGroupByName(string audioGroupName, string methodThatCalled)
     {
-        List<AudioSource> audioGroupList = null;
+        AudioGroup audioGroup = null;
 
         try
         {
-            audioGroupList = _audioGroupDictionary[audioGroupName];
+            audioGroup = _audioGroupDictionary[audioGroupName];
         }
         catch (KeyNotFoundException exception)
         {
-            audioGroupList = new List<AudioSource>();
-            _audioGroupDictionary.Add(audioGroupName, audioGroupList);
-            _audioGroupList.Add(audioGroupName);
+            audioGroup = new AudioGroup(audioGroupName, new List<AudioSource>(), 1f); //*
+            _audioGroupDictionary.Add(audioGroupName, audioGroup);
+            _audioGroupList.Add(audioGroup);
 
             Debug.Log("AudioManager on " + methodThatCalled + ": no Audio Group with name [" + audioGroupName + "]. Creating a new one...");
         }
 
-        return audioGroupList;
+        return audioGroup;
     }
 
     public void Play(string audioClipName, GameObject targetObjectToPlayClip, string audioGroupName)
@@ -253,29 +263,31 @@ public class AudioManager : MonoBehaviour
 
         AudioSource targetAudioSource = targetObjectToPlayClip.GetComponent<AudioSource>();
 
-        List<AudioSource> audioGroupList = RetrieveAudioSourceListByAudioGroup(audioGroupName, "Play");
+        AudioGroup audioGroupList = RetrieveAudioGroupByName(audioGroupName, "Play");
 
         if (targetAudioSource != null)
         {
             if (!_activeAudioSourceList.Contains(targetAudioSource))
             {
-                _orignalVolumeDictionary.Add(targetAudioSource, targetAudioSource.volume);
-                targetAudioSource.volume = targetAudioSource.volume * GlobalSoundEffectsVolume;
+                float defaultVolume = targetAudioSource.volume;
+                _orignalVolumeDictionary.Add(targetAudioSource, defaultVolume);
+                targetAudioSource.volume = (defaultVolume * audioGroupList.Volume) * GlobalSoundEffectsVolume;
                 _activeAudioSourceList.Add(targetAudioSource);
-                audioGroupList.Add(targetAudioSource);
-            } else if (!audioGroupList.Contains(targetAudioSource))
+                audioGroupList.List.Add(targetAudioSource);
+            } else if (!audioGroupList.List.Contains(targetAudioSource))
             {
-                audioGroupList.Add(targetAudioSource);
+                targetAudioSource.volume = (_orignalVolumeDictionary[targetAudioSource] * audioGroupList.Volume) * GlobalSoundEffectsVolume;
+                audioGroupList.List.Add(targetAudioSource);
             }
 
         }
         else
         {
-            targetAudioSource = targetObjectToPlayClip.AddComponent<AudioSource>();
+            targetAudioSource = targetObjectToPlayClip.AddComponent<AudioSource>(); //*
             _orignalVolumeDictionary.Add(targetAudioSource, targetAudioSource.volume);
-            targetAudioSource.volume = targetAudioSource.volume * GlobalSoundEffectsVolume;
+            targetAudioSource.volume = (targetAudioSource.volume * audioGroupList.Volume) * GlobalSoundEffectsVolume;
             _activeAudioSourceList.Add(targetAudioSource);
-            audioGroupList.Add(targetAudioSource);
+            audioGroupList.List.Add(targetAudioSource);
         }
 
         //Debug.Log(_orignalVolumeDictionary[targetAudioSource].ToString());
@@ -284,16 +296,17 @@ public class AudioManager : MonoBehaviour
         targetAudioSource.Play();
     }
 
-    public void ChangeVolume (float volume, string audioGroup)
+    public void ChangeVolume (float volume, string audioGroupName)
     {
-        List<AudioSource> audioGroupAudioSourceList = RetrieveAudioSourceListByAudioGroup(audioGroup, "ChangeVolume");
+        AudioGroup audioGroup = RetrieveAudioGroupByName(audioGroupName, "ChangeVolume");
+        audioGroup.Volume = volume;
 
-        if (audioGroupAudioSourceList.Count > 0)
+        if (audioGroup.List.Count > 0)
         {
-            foreach (AudioSource audioSource in audioGroupAudioSourceList)
+            foreach (AudioSource audioSource in audioGroup.List)
             {
                 //Debug.Log("UMA");
-                audioSource.volume = _orignalVolumeDictionary[audioSource] * volume;
+                audioSource.volume = (_orignalVolumeDictionary[audioSource] * volume) * GlobalSoundEffectsVolume;
             }
         }
     }
@@ -302,18 +315,6 @@ public class AudioManager : MonoBehaviour
 
     public void DebugThis(string args)
     {
-        Debug.Log(_audioGroupDictionary[args].Count);
-        if (i > 0)
-        {
-            Debug.Log("AQ");
-            ChangeVolume(0.5f, args);
-            AudioSource audioSource = _audioGroupDictionary[args][0];
-            Debug.Log(audioSource.volume);
-            Debug.Log(GlobalSoundEffectsVolume);
-
-        } else
-        {
-            i++;
-        }
+        Debug.Log(_audioGroupList[0].List[0].volume) ;
     }
 }
