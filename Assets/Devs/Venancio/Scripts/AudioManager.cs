@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 //TO-DO: No audioGroupList, fazer uma lista de um objeto proprio, onde se possa colocar um float e uma string).
 public class AudioManager : MonoBehaviour
@@ -316,5 +317,18 @@ public class AudioManager : MonoBehaviour
     public void DebugThis(string args)
     {
         Debug.Log(_audioGroupList[0].List[0].volume) ;
+    }
+
+    [MenuItem("GameObject/Managers/Audio Manager", false, 10)]
+    static void CreateCustomGameObject(MenuCommand menuCommand)
+    {
+        // Create a custom game object
+        GameObject go = new GameObject("Audio Manager");
+        go.AddComponent<AudioManager>();
+        // Ensure it gets reparented if this was a context click (otherwise does nothing)
+        GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
+        // Register the creation in the undo system
+        Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
+        Selection.activeObject = go;
     }
 }
