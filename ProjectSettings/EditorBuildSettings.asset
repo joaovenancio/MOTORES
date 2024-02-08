@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/CaioDialogTest.unity
     guid: 7794195eea76ca64792ad1c624c9d1c7
+  - enabled: 1
+    path: Assets/Devs/Venancio/Scenes/LocationSelect.unity
+    guid: 84e93892929faf64db2b3f956f2f5e6d
   m_configObjects: {}

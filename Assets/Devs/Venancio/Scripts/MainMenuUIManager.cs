@@ -8,16 +8,17 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField]
     private Button loadGameButton;
     [SerializeField]
-    private IGameDataManager gameDataManager;
+    private DataManager _dataManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (gameDataManager.CanLoadAGame())
+        _dataManager = DataManager.Instance;
+
+        if (_dataManager.CanLoadGame())
         {
             loadGameButton.interactable = true;
         }
-
 
     }
 

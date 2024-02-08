@@ -257,6 +257,58 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 16313470}
   m_CullTransparentMesh: 1
+--- !u!1 &17488064
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 17488066}
+  - component: {fileID: 17488065}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &17488065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 17488064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95768a4ebcb48d1409e100a7d61820b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameObjectoToPlaySound: {fileID: 0}
+  _saveManager: {fileID: 0}
+  OnChapterOne:
+    m_PersistentCalls:
+      m_Calls: []
+  OnChapterTwo:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &17488066
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 17488064}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 482.1216, y: 296.13333, z: 1.317801}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &184755550
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,7 +391,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 184755553}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1976233861}
+        m_TargetAssemblyTypeName: DataManager, Assembly-CSharp
+        m_MethodName: NewGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: LocationSelect
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 17488065}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: ChangeScene
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: LocationSelect
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &184755553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,18 +552,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_backgroundMusicsData:
-  - Name: Circotorio
-    AudioClip: {fileID: 8300000, guid: 931746d35a6b51b4bbd66a3d6a498b1d, type: 3}
-  m_backgroundVolume: 0
+  - Name: Lights
+    AudioClip: {fileID: 8300000, guid: 54433bff175c10d4c8ec8d9e6188f38b, type: 3}
+  - Name: FeelGood
+    AudioClip: {fileID: 8300000, guid: 5dbf904884296944bbc9d28b29785655, type: 3}
+  - Name: Journey
+    AudioClip: {fileID: 8300000, guid: aa19ea76d57ccd64b88137e0d9fb78da, type: 3}
+  m_backgroundVolume: 0.268
   _playOnStart: 1
-  _backgroundMusicToPlay: Circotorio
+  _backgroundMusicToPlay: Lights
   m_audioClipsData:
   - Name: Gaga
     AudioClip: {fileID: 8300000, guid: 931746d35a6b51b4bbd66a3d6a498b1d, type: 3}
   _GlobalSoundEffectsVolume: 1
   _activeAudioSourceList: []
-  _audioGroupList:
-  - Name: Teste
+  AudioGroups:
+  - Name: UI Effects
+    List: []
+    Volume: 0.5
+  - Name: Dialogue Effects
+    List: []
+    Volume: 0.5
+  - Name: SFX
     List: []
     Volume: 0.5
   BackgroundMusicAudioSource: {fileID: 0}
@@ -687,7 +773,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58e99c360f283ee43a9e2205515ced5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadGameButton: {fileID: 0}
+  loadGameButton: {fileID: 1348576066}
+  _dataManager: {fileID: 1976233861}
 --- !u!1 &1270352134
 GameObject:
   m_ObjectHideFlags: 0
@@ -873,7 +960,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1348576067}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1976233861}
+        m_TargetAssemblyTypeName: DataManager, Assembly-CSharp
+        m_MethodName: LoadGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1348576067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1071,7 +1170,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1821995718}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff4153c835a79664eab72ad84266d2ec, type: 3}
   m_Name: 
@@ -1309,7 +1408,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1907292640}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff4153c835a79664eab72ad84266d2ec, type: 3}
   m_Name: 
@@ -1330,6 +1429,71 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1976233859
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1976233862}
+  - component: {fileID: 1976233861}
+  - component: {fileID: 1976233860}
+  m_Layer: 0
+  m_Name: DataManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1976233860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1976233859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c58661bb28d02264a951393749dc9063, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _path: 
+  _arquiveName: Gay
+  SaveData:
+    ListOfConditions: []
+    Chapter: 
+--- !u!114 &1976233861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1976233859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e20c03dc22d0224c8662e871b601549, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _conditions: []
+  Chapter: 
+  _saveManager: {fileID: 1976233860}
+--- !u!4 &1976233862
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1976233859}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 595.0404, y: 262.87918, z: -1.0857725}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1341,3 +1505,5 @@ SceneRoots:
   - {fileID: 755876510}
   - {fileID: 1821995720}
   - {fileID: 1907292643}
+  - {fileID: 17488066}
+  - {fileID: 1976233862}

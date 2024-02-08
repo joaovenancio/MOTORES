@@ -7,9 +7,13 @@ public class DataManager : MonoBehaviour
 {
     public static DataManager Instance { get; private set; }
     [SerializeField]
-    private Data _data;
+    [Serialize]
+    private List<GameCondition> _conditions;
+    public string Chapter;
+    [SerializeField]
+    private SaveManager _saveManager;
 
-    public Dictionary<string, GameCondition> Conditions = new Dictionary<string, GameCondition>();
+    private Dictionary<string, GameCondition> _conditionsDictionary = new Dictionary<string, GameCondition>();
     
     void Awake()
     {
@@ -29,10 +33,88 @@ public class DataManager : MonoBehaviour
 
     private void InitializeVariables ()
     {
-        foreach (GameCondition gameCondition in _data.Conditions)
+        if (_saveManager.SaveData == null)
         {
-            Conditions.Add(gameCondition.Name, gameCondition);
+            SaveData newSaveData = new SaveData();
+            newSaveData.Chapter = Chapter;
+            newSaveData.ListOfConditions = _conditions;
+            
+            _saveManager.SaveData = newSaveData;
+        }
+        _conditions = _saveManager.SaveData.ListOfConditions;
+        Chapter = _saveManager.SaveData.Chapter;
+
+        _conditionsDictionary = new Dictionary<string, GameCondition>();
+
+        foreach (GameCondition gameCondition in _conditions)
+        {
+            _conditionsDictionary.Add(gameCondition.Name, gameCondition);
         }
     }
 
+    public bool CanLoadGame()
+    {
+        _saveManager.Load();
+        if (_saveManager.SaveData.Chapter != ""  || _saveManager.SaveData.Chapter != null &&
+            _saveManager.SaveData.ListOfConditions != null)
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
+
+    }
+
+    public void LoadGame()
+    {
+        _saveManager.Load();
+        InitializeVariables();
+        GameManager.Instance.ChangeScene("LocationSelect");
+    }
+
+    public void SaveGame()
+    {
+        _saveManager.SaveData.Chapter = Chapter;
+        _saveManager.SaveData.ListOfConditions = _conditions;
+        _saveManager.Save();
+    }
+
+    public void NewGame()
+    {
+        SaveData newSaveData = new SaveData();
+        newSaveData.Chapter = "1";
+        newSaveData.ListOfConditions = new List<GameCondition>();
+
+        _saveManager.SaveData = newSaveData;
+
+        InitializeVariables();
+    }
+
+    public GameCondition AddCondition (string conditionName, bool value)
+    {
+        GameCondition newGameCondition = new GameCondition();
+        newGameCondition.Name = conditionName;
+        newGameCondition.Value = value;
+
+        _conditions.Add(newGameCondition);
+        _conditionsDictionary.Add(conditionName, newGameCondition);
+
+        return newGameCondition;
+    }
+
+    public bool GetCondition(string conditionName)
+    {
+        GameCondition condition;
+        try
+        {
+            condition = _conditionsDictionary[conditionName];
+        } catch (KeyNotFoundException exception)
+        {
+            condition = AddCondition(conditionName, false);
+            Debug.Log("Data Manager: Could not find condition +" + conditionName +". Exception: " + exception.Message + ".Creating a new one...");
+        }
+
+        return condition.Value;
+    }
 }

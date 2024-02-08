@@ -14,12 +14,12 @@ public class SaveManager : MonoBehaviour
     private string _arquiveName;
 
     [SerializeField]
-    private SaveData _saveData;
+    public SaveData SaveData; //!
 
     //funcao para guardar
     public void Save()
     {
-        string data = JsonUtility.ToJson(_saveData);
+        string data = JsonUtility.ToJson(SaveData);
         File.WriteAllText(_path, data);
     }
 
@@ -30,7 +30,7 @@ public class SaveManager : MonoBehaviour
         {
             // Debug.Log("ok");
             string data = File.ReadAllText(_path);
-            _saveData = JsonUtility.FromJson<SaveData>(data);
+            SaveData = JsonUtility.FromJson<SaveData>(data);
         }
     }
 
