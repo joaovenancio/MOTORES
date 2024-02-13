@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DataManager : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class DataManager : MonoBehaviour
     [SerializeField]
     private SaveManager _saveManager;
 
-    private Dictionary<string, GameCondition> _conditionsDictionary = new Dictionary<string, GameCondition>();
+    public Dictionary<string, GameCondition> ConditionsDictionary = new Dictionary<string, GameCondition>();
     
     void Awake()
     {
@@ -44,11 +45,11 @@ public class DataManager : MonoBehaviour
         _conditions = _saveManager.SaveData.ListOfConditions;
         Chapter = _saveManager.SaveData.Chapter;
 
-        _conditionsDictionary = new Dictionary<string, GameCondition>();
+        ConditionsDictionary = new Dictionary<string, GameCondition>();
 
         foreach (GameCondition gameCondition in _conditions)
         {
-            _conditionsDictionary.Add(gameCondition.Name, gameCondition);
+            ConditionsDictionary.Add(gameCondition.Name, gameCondition);
         }
     }
 
@@ -80,15 +81,27 @@ public class DataManager : MonoBehaviour
         _saveManager.Save();
     }
 
-    public void NewGame()
+    public void NewGame(string sceneName)
     {
         SaveData newSaveData = new SaveData();
         newSaveData.Chapter = "1";
         newSaveData.ListOfConditions = new List<GameCondition>();
 
+        GameCondition gameCondition = new GameCondition();
+        gameCondition.Name = "cityUnlocked";
+        gameCondition.Value = false;
+        newSaveData.ListOfConditions.Add(gameCondition);
+
+        gameCondition = new GameCondition();
+        gameCondition.Name = "industryUnlocked";
+        gameCondition.Value = false;
+        newSaveData.ListOfConditions.Add(gameCondition);
+
         _saveManager.SaveData = newSaveData;
 
         InitializeVariables();
+
+        SceneManager.LoadScene(sceneName);
     }
 
     public GameCondition AddCondition (string conditionName, bool value)
@@ -98,7 +111,7 @@ public class DataManager : MonoBehaviour
         newGameCondition.Value = value;
 
         _conditions.Add(newGameCondition);
-        _conditionsDictionary.Add(conditionName, newGameCondition);
+        ConditionsDictionary.Add(conditionName, newGameCondition);
 
         return newGameCondition;
     }
@@ -108,7 +121,7 @@ public class DataManager : MonoBehaviour
         GameCondition condition;
         try
         {
-            condition = _conditionsDictionary[conditionName];
+            condition = ConditionsDictionary[conditionName];
         } catch (KeyNotFoundException exception)
         {
             condition = AddCondition(conditionName, false);

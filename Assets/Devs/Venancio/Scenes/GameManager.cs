@@ -43,6 +43,10 @@ public class GameManager : MonoBehaviour
         AudioManager.Instance.Play("2", GameObjectoToPlaySound, "Biggies");
     }
 
+    private void Awake()
+    {
+        
+    }
 
     private void Start()
     {
