@@ -6,6 +6,7 @@ using Ink.Runtime;
 using System;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -98,8 +99,20 @@ public class DialogueManager : MonoBehaviour
                         _nametag.text = param;
                     }
                     break;
-                case "color":
+
+                case "narrator":
+                    if (param == "empty")
+                    {
+                        _nametag.text = "Narrator";
+                        //ADICIONAR COR OU ITÁLICO AQUI PRA DIFERENCIAR NARRADOR DO MC
+                    }
+                    break;
+                case "timeskip":
                     //SetTextColor(param);
+                    break;
+
+                case "save":
+                    DataManager.Instance.AddCondition(param,true);
                     break;
             }
         }
@@ -214,7 +227,7 @@ public class DialogueManager : MonoBehaviour
 
     private void FinishDialogue()
     {
-        Debug.Log("The End");
+        SceneManager.LoadScene("LocationSelect");
     }
 
 }

@@ -445,7 +445,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1039472477}
   m_HandleRect: {fileID: 1039472476}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1015,14 +1015,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 166093647}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: Test
-        m_Mode: 1
+        m_MethodName: ChangeScene
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: CITY_DIALOGUE
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &369272566
@@ -1504,7 +1504,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: CaioDialogTest
+          m_StringArgument: UNIV_DIALOGUE
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &830035611

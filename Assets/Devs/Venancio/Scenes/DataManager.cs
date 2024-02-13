@@ -110,7 +110,7 @@ public class DataManager : MonoBehaviour
         newGameCondition.Name = conditionName;
         newGameCondition.Value = value;
 
-        if (!_conditions.Contains(newGameCondition))
+        if (!ConditionsDictionary.ContainsKey(conditionName))
         {
             _conditions.Add(newGameCondition);
             ConditionsDictionary.Add(conditionName, newGameCondition);

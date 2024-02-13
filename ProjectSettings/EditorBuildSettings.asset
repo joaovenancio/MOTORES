@@ -6,15 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
     path: Assets/Devs/Venancio/Scenes/TesteJV.unity
     guid: 856b4bfff0dc79f4fac89f7fc32482a5
   - enabled: 1
-    path: Assets/CaioDialogTest.unity
-    guid: 7794195eea76ca64792ad1c624c9d1c7
-  - enabled: 1
     path: Assets/Devs/Venancio/Scenes/LocationSelect.unity
     guid: 84e93892929faf64db2b3f956f2f5e6d
+  - enabled: 1
+    path: Assets/UNIV_DIALOGUE.unity
+    guid: 7794195eea76ca64792ad1c624c9d1c7
+  - enabled: 1
+    path: Assets/CITY_DIALOGUE.unity
+    guid: b12931744436357438ec9291c3a2c885
   m_configObjects: {}
