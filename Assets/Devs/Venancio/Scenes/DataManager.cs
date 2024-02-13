@@ -110,8 +110,15 @@ public class DataManager : MonoBehaviour
         newGameCondition.Name = conditionName;
         newGameCondition.Value = value;
 
-        _conditions.Add(newGameCondition);
-        ConditionsDictionary.Add(conditionName, newGameCondition);
+        if (!_conditions.Contains(newGameCondition))
+        {
+            _conditions.Add(newGameCondition);
+            ConditionsDictionary.Add(conditionName, newGameCondition);
+
+        } else
+        {
+            ConditionsDictionary[conditionName].Value = value;
+        }
 
         return newGameCondition;
     }
