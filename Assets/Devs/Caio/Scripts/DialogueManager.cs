@@ -12,22 +12,19 @@ public class DialogueManager : MonoBehaviour
 {
     public TextAsset InkFile;
     [SerializeField]private GameObject _textBox;
-    //[SerializeField]private GameObject _customButton;
-    //[SerializeField]private GameObject _optionPanel;
     public bool isTalking = false;
 
     private static Story _story;
     private TMPro.TMP_Text _nametag;
     private TMPro.TMP_Text _message;
     private List<string> _tags;
-    //private static Choice _choiceSelected;
 
 
     private void Awake()
     {
         foreach (GameObject button in _choices)
         {
-            button.SetActive(false); //Desativa todos os botoes e tira da tela.
+            button.SetActive(false);                //Desativa todos os botoes e tira da tela.
         }
     }
 
@@ -35,8 +32,8 @@ public class DialogueManager : MonoBehaviour
 
     void Start()
     {
-        _story = new Story(InkFile.text); //pega o arquivo do ink e o deixa editavel/acessável no unity
-        _nametag = _textBox.transform.GetChild(0).GetComponent<TMPro.TMP_Text>(); //Pega os objetos que estão dentro do dialogue box na ordem e a caixa de texto do inspector respectivo
+        _story = new Story(InkFile.text);                                            //pega o arquivo do ink e o deixa editavel/acessável no unity
+        _nametag = _textBox.transform.GetChild(0).GetComponent<TMPro.TMP_Text>();   //Pega os objetos que estão dentro do dialogue box na ordem e a caixa de texto do inspector respectivo
         _message = _textBox.transform.GetChild(1).GetComponent<TMPro.TMP_Text>();
         _tags = new List<string>(); 
 
@@ -45,7 +42,7 @@ public class DialogueManager : MonoBehaviour
 
         _choicesText = new TextMeshProUGUI[_choices.Length];
         int index = 0;
-        foreach(GameObject choice in _choices) //Pega o elemento de texto que ta dentro  do botao e coloca na variavel em cima
+        foreach(GameObject choice in _choices)                       //Pega o elemento de texto que ta dentro  do botao e coloca na variavel em cima
         {
             _choicesText[index] = choice.GetComponentInChildren<TextMeshProUGUI>();
             index++;
@@ -58,13 +55,12 @@ public class DialogueManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (_story.currentChoices.Count > 0) //Para não entrar em loop infinito no advance dialogue e por consequencia no show choices
+            if (_story.currentChoices.Count > 0)        //Para não entrar em loop infinito no advance dialogue e por consequencia no show choices
             {
 
             }
             else if (_story.canContinue)
             {
-                //_nametag.text = "Luke";
                 AdvanceDialogue();
             }
             else
@@ -81,15 +77,15 @@ public class DialogueManager : MonoBehaviour
 
     private void ParseTags()
     {
-        _tags = _story.currentTags; //Define a lista de tag com as tags do ink (#), 
-        foreach (string tag in _tags) //Percorre a lista de tags 
+        _tags = _story.currentTags;             //Define a lista de tag com as tags do ink (#), 
+        foreach (string tag in _tags)           //Percorre a lista de tags 
         {
             string prefix = tag.Split(' ')[0]; 
-            string param = tag.Split(' ')[1]; //Para cada Tag ele vai dividir entre prefixo e parametro(esquerda e direita). Cada tag tem a sua vez
+            string param = tag.Split(' ')[1];    //Para cada Tag ele vai dividir entre prefixo e parametro(esquerda e direita). Cada tag tem a sua vez
 
             switch (prefix.ToLower())
             {
-                case "name": //Verifica se este determinado string existe na tag. Se sim, rodar a linha de baixo
+                case "name":                   //Verifica se este determinado string existe na tag. Se sim, rodar a linha de baixo
                     if (param == "empty")
                     {
                         _nametag.text = "";
@@ -104,11 +100,13 @@ public class DialogueManager : MonoBehaviour
                     if (param == "empty")
                     {
                         _nametag.text = "Narrator";
-                        //ADICIONAR COR OU ITÁLICO AQUI PRA DIFERENCIAR NARRADOR DO MC
+                      
                     }
                     break;
-                case "timeskip":
-                    //SetTextColor(param);
+
+                case "picture":
+
+
                     break;
 
                 case "save":
@@ -118,31 +116,26 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    private IEnumerator TypeSentence(string sentence) //Essa função espera receber uma string, e mostrar ela para o Sentence dentro do dialoguebox
+    private IEnumerator TypeSentence(string sentence)           //Essa função espera receber uma string, e mostrar ela para o Sentence dentro do dialoguebox
     {
         _message.text = "";
-        foreach (char letter in sentence.ToCharArray()) //Para fazer o texto aparecer letra a letra na frase
+        foreach (char letter in sentence.ToCharArray())          //Para fazer o texto aparecer letra a letra na frase
         {
             _message.text += letter;
             yield return null;
         }
-        //CharacterScript tempSpeaker = GameObject.FindObjectOfType<CharacterScript>();  (ainda nao funciona)
-        // if (tempSpeaker.isTalking)
-        // {
-        //     SetAnimation("idle");
-        // }
         yield return null;
     }
 
     [Header("Choices UI")]
-    [SerializeField] private GameObject[] _choices; //cria uma lista de choices
+    [SerializeField] private GameObject[] _choices;             //cria uma lista de choices
     
 
     private void ShowChoices() 
     {
-        List<Choice> currentChoices = _story.currentChoices; //pega as opções de escolha do inky e coloca numa lista
+        List<Choice> currentChoices = _story.currentChoices;        //pega as opções de escolha do inky e coloca numa lista
 
-        if (currentChoices.Count > _choices.Length) //só para caso a lista de escolhas seja maior do que a UI aguenta
+        if (currentChoices.Count > _choices.Length)                 //só para caso a lista de escolhas seja maior do que a UI aguenta
         {
             Debug.LogError("More choices were given than the UI can support. Number of choices give:" + currentChoices.Count);  
             return;
@@ -151,15 +144,15 @@ public class DialogueManager : MonoBehaviour
         int index = 0;
         foreach (Choice choice in currentChoices)
         {
-            _choices[index].gameObject.SetActive(true); //ativar botao
-            _choicesText[index].text = choice.text; //colocar o texto da historia dentro do botão
+            _choices[index].gameObject.SetActive(true);              //ativar botao
+            _choicesText[index].text = choice.text;                  //colocar o texto da historia dentro do botão
             index++; 
         }
 
 
        for (int i = index; i < _choices.Length; i++)
         {
-            _choices[i].gameObject.SetActive(false); //desativar botoes nao utilizados
+            _choices[i].gameObject.SetActive(false);                //desativar botoes nao utilizados
         }
 
         StartCoroutine(SelectFirstChoice());
@@ -169,11 +162,10 @@ public class DialogueManager : MonoBehaviour
 
     private IEnumerator SelectFirstChoice() 
     {
-        //clear first then wait
-        //for at least one frame before we set the current selected object
+
         EventSystem.current.SetSelectedGameObject(null);
         yield return new WaitForEndOfFrame();
-        EventSystem.current.SetSelectedGameObject(_choices[0].gameObject); //fazer as setas funcionaram
+        EventSystem.current.SetSelectedGameObject(_choices[0].gameObject);      //fazer as setas funcionaram
         AdvanceDialogue();
 
     }
@@ -181,18 +173,18 @@ public class DialogueManager : MonoBehaviour
 
 
 
-    public static void SetDecision(int choiceIndex) //para inserir o comando de clicar para escolher
+    public static void SetDecision(int choiceIndex)             //para inserir o comando de clicar para escolher
     {
         _story.ChooseChoiceIndex(choiceIndex);
     }
 
 
 
-    public void AdvanceDialogAfterChoice() //Mata os botoes depois de uma escolha ser feita
+    public void AdvanceDialogAfterChoice()                  //Mata os botoes depois de uma escolha ser feita
     {
         foreach (GameObject choiceGameObject in _choices)
         {
-            choiceGameObject.SetActive(false); //ativar botao
+            choiceGameObject.SetActive(false);               //ativar botao
         }
         AdvanceDialogue();
     }
@@ -207,11 +199,11 @@ public class DialogueManager : MonoBehaviour
     {
         if (_story.canContinue)
         {
-            string currentSentence = _story.Continue();  //Continua a historia, le as tags, para os ienumerators e começa a digitar o proximo texto
+            string currentSentence = _story.Continue();     //Continua a historia, le as tags, para os ienumerators e começa a digitar o proximo texto
             ParseTags();
             StopAllCoroutines();
             StartCoroutine(TypeSentence(currentSentence));
-            if (_story.currentChoices.Count != 0) //verifica se existem escolhas, e inicia a show choices
+            if (_story.currentChoices.Count != 0)            //verifica se existem escolhas, e inicia a show choices
             {
                 ShowChoices();
             }
