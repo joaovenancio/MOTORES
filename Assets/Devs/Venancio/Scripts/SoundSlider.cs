@@ -8,17 +8,18 @@ public class SoundSlider : MonoBehaviour
     public string AudioGroupName;
     public Slider Slider;
 
-    //private void OnEnable()
-    //{
-    //    if (Slider != null)
-    //        SetSliderFunction();
-    //}
 
-    //private void OnDisable()
-    //{
-    //    if (Slider != null)
-    //        Slider.onValueChanged.RemoveAllListeners();
-    //}
+    private void OnEnable()
+    {
+        if (Slider != null)
+            SetSliderFunction();
+    }
+
+    private void OnDisable()
+    {
+        if (Slider != null)
+            Slider.onValueChanged.RemoveAllListeners();
+    }
 
     public void SetSliderFunction()
     {

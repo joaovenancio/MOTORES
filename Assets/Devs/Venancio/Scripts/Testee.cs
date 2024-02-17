@@ -9,9 +9,9 @@ public class Testee : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        audioManager.Play("Gaga", gameObject, "Teste");
+        //audioManager.Play("Gaga", gameObject, "Teste");
         //audioManager.ChangeVolume(0.1f, "Teste");
-        audioManager.DebugThis("Teste");
+        //audioManager.DebugThis("Teste");
 
         //audioManager.GlobalSoundEffectsVolume = 0f;
 

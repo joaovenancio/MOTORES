@@ -160,7 +160,7 @@ public class AudioManager : MonoBehaviour
         {
             audioGroup.List = new List<AudioSource>();
         }
-}
+    }
 
 
     private void CheckVariables()
@@ -348,12 +348,6 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    private int i = 0;
-
-    public void DebugThis(string args)
-    {
-        Debug.Log(AudioGroups[0].List[0].volume) ;
-    }
 #if UNITY_EDITOR
     [MenuItem("GameObject/Managers/Audio Manager", false, 10)]
     static void CreateCustomGameObject(MenuCommand menuCommand)
